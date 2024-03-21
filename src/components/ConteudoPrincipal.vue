@@ -1,12 +1,13 @@
 <script lang="ts">
 import SelecionarIngredientes from './SelecionarIngredientes.vue';
+import Tag from './Tag.vue';
 export default {
     data(){
         return{
             ingredientes:['alho','manteiga','oregano']
         }
     },
-    components:{SelecionarIngredientes}
+    components:{SelecionarIngredientes,Tag}
 }
 </script>
 
@@ -25,8 +26,8 @@ export default {
                 preciso usar o v-bind: porem como eh algo tao comum
                 o vue aceita que seja apenas os : -->
 
-                <li v-for="ingrediente in ingredientes" :key="ingrediente" class="ingrediente">
-                    {{ingrediente}}
+                <li v-for="ingrediente in ingredientes" :key="ingrediente">
+                    <Tag :texto=" ingrediente " ativa />
                 </li>
             </ul>
             <p v-else class="paragrafo lista-vazia">
@@ -67,17 +68,7 @@ export default {
   flex-wrap: wrap;
 }
 
-.ingrediente {
-  display: inline-block;
-  border-radius: 0.5rem;
-  min-width: 4.25rem;
-  padding: 0.5rem;
-  text-align: center;
-    transition: 0.2s;
-    color: var(--creme, #FFFAF3);
-  background: var(--coral, #F0633C);
-  font-weight: 700;
-}
+
 
 .lista-vazia {
   display: flex;
