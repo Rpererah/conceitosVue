@@ -1,42 +1,39 @@
 <script lang="ts">
+import MostrarReceitas from './MostrarReceitas.vue';
 import SelecionarIngredientes from './SelecionarIngredientes.vue';
+import SuaLista from './SuaLista.vue';
 import Tag from './Tag.vue';
+
+type Pagina = 'SelecionarIngredientes' | 'MostrarReceitas'
+
 export default {
+  
     data(){
         return{
-            ingredientes:['alho','manteiga','oregano']
+            ingredientes:[] as string[],
+            conteudo:'SelecionarIngredientes' as Pagina
         }
     },
-    components:{SelecionarIngredientes,Tag}
+    components:{SelecionarIngredientes,Tag,SuaLista,MostrarReceitas},
+    methods:{
+      adicionarIngrediente(ingrediente:string){
+        this.ingredientes.push(ingrediente)
+      },
+      removeIngrediente(ingrediente:string){
+        this.ingredientes=this.ingredientes.filter(elemento => elemento != ingrediente)
+      }
+    }
 }
 </script>
 
 <template>
     <main class="conteudo-principal">
-        <section>
-            <span class="subtitulo-lg sua-lista-texto">
-                Sua lista:
-            </span>
-            <!-- v-if renderiza o conteudo caso a condicao seja vdd -->
-            <ul v-if="ingredientes.length" class="ingredientes-sua-lista">
-                <!-- v-for eh uma diretiva do vue, todas as diretivas
-                comecam com v-algumacoisa -->
-
-                <!-- quando eu precisar usar uma variavel dentro de um tributo
-                preciso usar o v-bind: porem como eh algo tao comum
-                o vue aceita que seja apenas os : -->
-
-                <li v-for="ingrediente in ingredientes" :key="ingrediente">
-                    <Tag :texto=" ingrediente " ativa />
-                </li>
-            </ul>
-            <p v-else class="paragrafo lista-vazia">
-                <img src="./../assets//images/icones/lista-vazia.svg" alt="icone de pesquisa" />
-                Sua lista está vazia, selecione ingredientes para iniciar.
-            </p>
-        </section>
-        
-      <SelecionarIngredientes/>
+      <SuaLista :ingredientes="ingredientes" />
+      <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'"
+      @adicionar-ingrediente="adicionarIngrediente($event)"
+      @remover-ingrediente="removeIngrediente($event)"
+      />
+      <MostrarReceitas v-else-if="conteudo === 'MostrarReceitas'"/>
     </main>
 </template>
 
@@ -52,33 +49,6 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: 5rem;
-}
-
-.sua-lista-texto {
-  color: var(--coral, #F0633C);
-  display: block;
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.ingredientes-sua-lista {
-  display: flex;
-  justify-content: center;
-  gap: 1rem 1.5rem;
-  flex-wrap: wrap;
-}
-
-
-
-.lista-vazia {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-
-  color: var(--coral, #F0633C);
-  text-align: center;
 }
 
 @media only screen and (max-width: 1300px) {
